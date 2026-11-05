@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin — Proper House</title>
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/inter-tight-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/tokens.css?v=20261027d">
+  <link rel="stylesheet" href="/css/bundle.css?v=20261027d">
+  <link rel="stylesheet" href="/admin/admin.css?v=20261027d">
+</head>
+<body class="ph ad">
+
+  <!-- Login -->
+  <main class="ad-login" data-view="login" hidden>
+    <form class="ad-login__card" data-login>
+      <p class="ph-wordmark">PROPER HOUSE</p>
+      <p class="ph-eyebrow">Panel de administración</p>
+      <div class="ph-field">
+        <label for="pw">Contraseña</label>
+        <input class="ph-input" id="pw" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="ph-btn ph-btn--primary" type="submit">Entrar</button>
+      <p class="ad-error" role="alert" data-login-msg></p>
+    </form>
+  </main>
+
+  <!-- App -->
+  <div data-view="app" hidden>
+    <header class="ad-header">
+      <div class="ph-container ad-header__in">
+        <a class="ph-wordmark" href="/admin">PROPER HOUSE <span class="ad-badge">Admin</span></a>
+        <nav class="ad-tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="turnos">Turnos</button>
+          <button role="tab" aria-selected="false" data-tab="productos">Productos</button>
+        </nav>
+        <div class="ad-header__end">
+          <a class="ph-link" href="/" target="_blank" rel="noopener">Ver sitio ↗</a>
+          <button class="ph-btn ph-btn--sm" type="button" data-logout>Salir</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Turnos -->
+    <section class="ph-container ad-panel" data-panel="turnos">
+      <div class="ad-top">
+        <div>
+          <p class="ph-eyebrow">Agenda</p>
+          <h1 class="ph-title-xl">Turnos.</h1>
+        </div>
+        <button class="ph-btn ph-btn--primary" type="button" data-new-turno>+ Nuevo turno</button>
+      </div>
+
+      <div class="ad-stats">
+        <div><span class="ph-meta ph-muted">Hoy</span><b data-stat="hoy">–</b></div>
+        <div><span class="ph-meta ph-muted">Próximos</span><b data-stat="proximos">–</b></div>
+        <div><span class="ph-meta ph-muted">Cancelados (próx.)</span><b data-stat="cancelados">–</b></div>
+      </div>
+
+      <div class="ad-filters">
+        <div class="ph-chips" role="group" aria-label="Rango" data-rango>
+          <button type="button" class="ph-chip" data-r="hoy">Hoy</button>
+          <button type="button" class="ph-chip" data-r="proximos" aria-pressed="true">Próximos</button>
+          <button type="button" class="ph-chip" data-r="pasados">Pasados</button>
+          <button type="button" class="ph-chip" data-r="todos">Todos</button>
+        </div>
+        <div class="ad-filters__row">
+          <div class="ph-field"><label for="f-fecha">Día</label><input class="ph-input" type="date" id="f-fecha"></div>
+          <div class="ph-field"><label for="f-sede">Sede</label><select class="ph-select" id="f-sede"><option value="">Todas</option></select></div>
+          <div class="ph-field"><label for="f-barbero">Barbero</label><select class="ph-select" id="f-barbero"><option value="">Todos</option></select></div>
+          <div class="ph-field"><label for="f-estado">Estado</label>
+            <select class="ph-select" id="f-estado">
+              <option value="">Todos</option>
+              <option value="confirmado" selected>Confirmados</option>
+              <option value="atendido">Atendidos</option>
+              <option value="cancelado">Cancelados</option>
+            </select>
+          </div>
+          <div class="ph-field ad-grow"><label for="f-q">Buscar</label><input class="ph-input" id="f-q" type="search" placeholder="Nombre o teléfono"></div>
+        </div>
+      </div>
+
+      <div class="ad-list" data-turnos aria-live="polite"></div>
+    </section>
+
+    <!-- Productos -->
+    <section class="ph-container ad-panel" data-panel="productos" hidden>
+      <div class="ad-top">
+        <div>
+          <p class="ph-eyebrow">Pimp Paradise · venta en sede</p>
+          <h1 class="ph-title-xl">Productos.</h1>
+        </div>
+        <button class="ph-btn ph-btn--primary" type="button" data-new-prod>+ Nuevo producto</button>
+      </div>
+      <p class="ph-body-s ph-muted ad-hint">Los productos visibles aparecen en la sección 05 del sitio, en este orden. Usá ↑ ↓ para reordenar.</p>
+      <div class="ad-prods" data-prods></div>
+    </section>
+  </div>
+
+  <!-- Diálogo producto -->
+  <dialog class="ad-dialog" data-prod-dialog>
+    <form method="dialog" data-prod-form>
+      <div class="ad-dialog__head"><h2 class="ph-title-l" data-prod-title>Nuevo producto</h2><button class="ad-x" value="cancel" aria-label="Cerrar">×</button></div>
+      <div class="ad-dialog__body">
+        <div class="ad-img-pick">
+          <div class="ad-img-prev" data-img-prev><span>Sin foto</span></div>
+          <div class="ad-img-actions">
+            <label class="ph-btn ph-btn--sm">Elegir foto<input type="file" accept="image/jpeg,image/png,image/webp" data-img-input hidden></label>
+            <button type="button" class="ph-btn ph-btn--sm" data-img-remove hidden>Quitar foto</button>
+            <p class="ph-meta ph-muted">Cuadrada · JPG, PNG o WebP</p>
+          </div>
+        </div>
+        <div class="ph-field"><label for="p-nombre">Nombre</label><input class="ph-input" id="p-nombre" maxlength="60" required placeholder="Pomada Bali"></div>
+        <div class="ph-field"><label for="p-cat">Categoría</label><select class="ph-select" id="p-cat"></select></div>
+        <div class="ph-field"><label for="p-desc">Descripción corta</label><input class="ph-input" id="p-desc" maxlength="120" placeholder="Acabado semi mate."></div>
+        <label class="ad-switch"><input type="checkbox" id="p-visible" checked><span></span> Visible en el sitio</label>
+        <p class="ad-error" role="alert" data-prod-msg></p>
+      </div>
+      <div class="ad-dialog__foot">
+        <button class="ph-btn" value="cancel">Cancelar</button>
+        <button class="ph-btn ph-btn--primary" type="submit" value="save" data-prod-save>Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Diálogo turno manual -->
+  <dialog class="ad-dialog" data-turno-dialog>
+    <form method="dialog" data-turno-form>
+      <div class="ad-dialog__head"><h2 class="ph-title-l">Nuevo turno</h2><button class="ad-x" value="cancel" aria-label="Cerrar">×</button></div>
+      <div class="ad-dialog__body">
+        <p class="ph-body-s ph-muted">Para turnos tomados por WhatsApp o en el local.</p>
+        <div class="ad-grid2">
+          <div class="ph-field"><label for="t-sede">Sede</label><select class="ph-select" id="t-sede"></select></div>
+          <div class="ph-field"><label for="t-barbero">Barbero</label><select class="ph-select" id="t-barbero"></select></div>
+          <div class="ph-field"><label for="t-fecha">Día</label><input class="ph-input" type="date" id="t-fecha" required></div>
+          <div class="ph-field"><label for="t-hora">Horario</label><select class="ph-select" id="t-hora"></select></div>
+        </div>
+        <div class="ph-field"><span class="ph-field__l">Servicios</span><div class="ph-chips" data-t-servicios></div></div>
+        <div class="ad-grid2">
+          <div class="ph-field"><label for="t-nombre">Nombre</label><input class="ph-input" id="t-nombre" maxlength="60" required></div>
+          <div class="ph-field"><label for="t-tel">Teléfono</label><input class="ph-input" id="t-tel" type="tel" maxlength="20" required></div>
+        </div>
+        <div class="ph-field"><label for="t-email">Email (opcional: le llega el resumen)</label><input class="ph-input" id="t-email" type="email" maxlength="120"></div>
+        <div class="ph-field"><label for="t-nota">Nota (opcional)</label><input class="ph-input" id="t-nota" maxlength="200"></div>
+        <p class="ad-error" role="alert" data-turno-msg></p>
+      </div>
+      <div class="ad-dialog__foot">
+        <button class="ph-btn" value="cancel">Cancelar</button>
+        <button class="ph-btn ph-btn--primary" type="submit" value="save">Agendar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Confirmación -->
+  <dialog class="ad-dialog ad-dialog--sm" data-confirm>
+    <form method="dialog">
+      <div class="ad-dialog__body">
+        <h2 class="ph-title-m" data-confirm-title></h2>
+        <p class="ph-body-s ph-muted" data-confirm-text></p>
+      </div>
+      <div class="ad-dialog__foot">
+        <button class="ph-btn" value="no">Volver</button>
+        <button class="ph-btn ph-btn--primary" value="yes" data-confirm-yes>Confirmar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="ad-toast" role="status" data-toast></div>
+
+  <script src="/admin/admin.js?v=20261027d" defer></script>
+</body>
+</html>

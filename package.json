@@ -1,0 +1,19 @@
+{
+  "name": "proper-house",
+  "version": "1.0.0",
+  "description": "Sitio, turnero y panel admin de Proper House Studio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^5.3.0",
+    "mysql2": "^3.24.6",
+    "nodemailer": "^10.2.1"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}

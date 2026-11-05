@@ -1,0 +1,69 @@
+/* PROPER HOUSE — tokens del Brandbook Web V6 */
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/texgyreheros-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face { font-family: 'Inter Tight'; src: url('../fonts/inter-tight-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('../fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Inter Tight'; src: url('../fonts/inter-tight-latin-500-normal.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('../fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Inter Tight'; src: url('../fonts/inter-tight-latin-600-normal.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('../fonts/ibm-plex-mono-latin-600-normal.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Anton'; src: url('../fonts/anton-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Permanent Marker'; src: url('../fonts/permanent-marker-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+
+:root {
+  /* Color — 70% paper · 20% ink · 10% grises y beige */
+  --paper: #ffffff;
+  --ink: #0b0b0b;
+  --ink-soft: #2b2b2b;
+  --on-ink: #ffffff;
+  --stone-100: #f3f3f2;
+  --stone-200: #e2e2e0;
+  --stone-400: #9b9b98;
+  --stone-600: #5f5f5c;
+  --bone: #f4f0e8;
+  --sand: #e3d9c8;
+  --clay: #a8957a;
+  --line: var(--stone-200);
+  --text-muted: var(--stone-600);
+
+  /* Tipografía */
+  --font-grotesk: 'TeX Gyre Heros', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-jersey: 'Anton', 'Impact', sans-serif;
+  --font-sans: 'Inter Tight', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-marker: 'Permanent Marker', cursive;
+  --tracking-display: -0.035em;
+  --tracking-mono: 0.08em;
+
+  /* Espacio (base 4) */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+  --space-12: 48px; --space-16: 64px; --space-24: 96px;
+
+  /* Grilla */
+  --container-max: 1440px;
+  --gutter: 32px;
+  --section-y: 96px;
+  --header-h: 72px;
+  --strip-h: 28px;
+
+  /* Radios */
+  --radius-pill: 999px;
+  --radius-input: 4px;
+
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --gutter: 16px;
+    --section-y: 64px;
+    --header-h: 56px;
+  }
+}
