@@ -244,8 +244,8 @@
         el('div', {}, el('dt', { text: 'Día' }), el('dd', { text: `${DIAS[d.getUTCDay()]} ${d.getUTCDate()} ${MESES[d.getUTCMonth()]}` })),
         el('div', {}, el('dt', { text: 'Horario' }), el('dd', { text: `${r.hora} hs` })),
         el('div', {}, el('dt', { text: 'Barbero' }), el('dd', { text: r.barbero }))),
-      el('p', { text: r.mailEnviado
-        ? `${serv}. Te mandamos el resumen del turno a ${email}. Si no podés venir, avisanos con anticipación.`
+      el('p', { text: r.mailActivo
+        ? `${serv}. Te enviamos el resumen del turno a ${email}. Si no podés venir, avisanos con anticipación.`
         : `${serv}. Si no podés venir, avisanos con anticipación.` }),
       el('div', { class: 'ph-actions' },
         el('button', { type: 'button', class: 'ph-btn ph-btn--light', onclick: nuevaReserva, text: 'Reservar otro turno' })),

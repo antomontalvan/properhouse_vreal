@@ -9,14 +9,15 @@ const mail = require('./mail');
 const { normalizarCelularAR } = require('./telefono');
 
 const PORT = process.env.PORT || 3000;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'cambiame';
+// Sin ADMIN_PASSWORD el panel queda cerrado (no hay clave por defecto).
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 // Clave estable para firmar la sesión del admin. Hostinger apaga la app cuando no tiene
 // visitas y la vuelve a levantar: con una clave fija la sesión sobrevive a esos reinicios.
 const SECRET = process.env.SESSION_SECRET
   || crypto.createHash('sha256').update(`ph|${ADMIN_PASSWORD}|${process.env.DB_PASSWORD || ''}|${process.env.DB_NAME || ''}`).digest('hex');
 
-if (ADMIN_PASSWORD === 'cambiame') {
-  console.warn('⚠  ADMIN_PASSWORD no está definida: usando "cambiame". Definila antes de publicar.');
+if (!ADMIN_PASSWORD) {
+  console.warn('⚠  ADMIN_PASSWORD no está definida: el panel /admin queda cerrado hasta que la cargues.');
 }
 
 const app = express();
@@ -113,6 +114,8 @@ function validarTurno(body, { admin = false } = {}) {
   let tel = soloDigitos(body.telefono);
   if (admin) {
     if (tel.length < 8 || tel.length > 15) return { error: 'Revisá el teléfono.' };
+    // Si es un celular argentino, se guarda como 549… (así andan los links de WhatsApp y llamada).
+    tel = normalizarCelularAR(tel) || tel;
   } else {
     // Celular del cliente, guardado en formato internacional (549…) para escribirle desde el admin.
     tel = normalizarCelularAR(tel);
@@ -170,6 +173,11 @@ async function enviarResumenMail(t) {
 
 function limitador(max, ventanaMs) {
   const hits = new Map();
+  // Borra las IPs que ya no tienen intentos dentro de la ventana, para no acumular memoria.
+  setInterval(() => {
+    const now = Date.now();
+    for (const [k, arr] of hits) if (!arr.some((t) => now - t < ventanaMs)) hits.delete(k);
+  }, ventanaMs).unref();
   return (req, res, next) => {
     const k = req.ip; const now = Date.now();
     const arr = (hits.get(k) || []).filter((t) => now - t < ventanaMs);
@@ -230,11 +238,12 @@ app.post('/api/turnos', limitador(8, 10 * 60 * 1000), h(async (req, res) => {
   const r = await crearTurno(v, 'web');
   if (r.error) return res.status(r.status).json({ error: r.error });
   const t = r.turno;
-  const m = await enviarResumenMail(t);
   res.status(201).json({
     id: t.id, fecha: t.fecha, hora: t.hora, sede: t.sede,
-    barbero: barberoPorId(t.barbero)?.nombre, mailEnviado: m.estado === 'enviado',
+    barbero: barberoPorId(t.barbero)?.nombre, mailActivo: mail.activo(),
   });
+  // El mail sale después de responder: así el cliente no espera al SMTP.
+  enviarResumenMail(t).catch((e) => console.error(`Mail: turno #${t.id}: ${e.message}`));
 }));
 
 app.get('/api/productos', h(async (req, res) => {
@@ -253,6 +262,7 @@ app.get('/media/:id', h(async (req, res) => {
 /* ───────────── API admin ───────────── */
 
 app.post('/api/admin/login', limitador(10, 15 * 60 * 1000), (req, res) => {
+  if (!ADMIN_PASSWORD) return res.status(503).json({ error: 'Falta configurar la contraseña del panel (ADMIN_PASSWORD).' });
   const pass = String(req.body?.password || '');
   const a = crypto.createHash('sha256').update(pass).digest();
   const b = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest();

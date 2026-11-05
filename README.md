@@ -15,12 +15,12 @@ Todo lo que cambia (turnos, productos y fotos subidas desde el admin) se guarda 
 ### 1. Crear la base de datos
 1. hPanel → **Websites** → tu sitio → **Dashboard** → **Databases** → **Management**.
 2. Creá una base con nombre, usuario y contraseña. Hostinger les agrega un prefijo, por ejemplo `u123456789_properhouse`. Anotá los tres datos tal como quedan.
-3. No hace falta crear tablas: la app las crea sola al arrancar la primera vez y carga los 9 productos del brandbook.
+3. No hace falta crear tablas: la app las crea sola al arrancar la primera vez y carga los 10 productos del brandbook.
 
 ### 2. Crear la Web App
 1. hPanel → **Websites** → **Create Website** → **Web App**.
 2. Elegí una de dos:
-   - **Upload your website files** y subí `proper-house-hostinger.zip` (el contenido ya está en la raíz del zip, sin `node_modules`).
+   - **Upload your website files** y subí un `.zip` del proyecto, con los archivos en la raíz del zip (sin `node_modules` ni `.env`). Se arma con `git archive --format=zip -o proper-house-hostinger.zip HEAD`.
    - **Import Git Repository**, si subís el proyecto a GitHub (cada cambio que subas se publica solo).
 3. En la configuración de build:
    - Framework: **Express** (o **Other**).
