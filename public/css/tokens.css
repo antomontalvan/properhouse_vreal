@@ -17,7 +17,7 @@
 @font-face { font-family: 'Permanent Marker'; src: url('../fonts/permanent-marker-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
 
 :root {
-  /* Color — 70% paper · 20% ink · 10% grises y beige */
+  /* Color — 70% paper · 20% ink · 10% grises + acento red orange */
   --paper: #ffffff;
   --ink: #0b0b0b;
   --ink-soft: #2b2b2b;
@@ -26,9 +26,14 @@
   --stone-200: #e2e2e0;
   --stone-400: #9b9b98;
   --stone-600: #5f5f5c;
-  --bone: #f4f0e8;
-  --sand: #e3d9c8;
-  --clay: #a8957a;
+  /* Antes beige/crema; ahora grises (bone = gris claro del hover, sand = un tono más). */
+  --bone: var(--stone-100);
+  --sand: var(--stone-200);
+  --clay: var(--stone-600);
+  /* Acento: números grandes, botones principales y selecciones del turnero. */
+  --accent: #ff4433;
+  --accent-hover: #e63b2b;
+  --on-accent: #ffffff;
   --line: var(--stone-200);
   --text-muted: var(--stone-600);
 

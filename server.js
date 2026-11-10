@@ -23,6 +23,42 @@ if (!ADMIN_PASSWORD) {
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
+
+// www.properhouse.com.ar → properhouse.com.ar (una sola dirección para Google).
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  if (host.startsWith('www.')) return res.redirect(301, `https://${host.slice(4)}${req.originalUrl}`);
+  next();
+});
+
+// Cabeceras de seguridad: el navegador no ejecuta scripts de otros sitios, no deja
+// meter la página en un iframe ajeno y no comparte de más con otros sitios.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  'frame-src https://www.google.com https://maps.google.com',
+  "frame-ancestors 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join('; ');
+app.use((req, res, next) => {
+  res.set({
+    'Content-Security-Policy': CSP,
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'SAMEORIGIN',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+    'Cross-Origin-Opener-Policy': 'same-origin',
+  });
+  if (req.secure) res.set('Strict-Transport-Security', 'max-age=31536000');
+  next();
+});
+
 app.use(express.json({ limit: '8mb' }));
 
 // Envuelve handlers async para que los errores lleguen al manejador de errores.
@@ -351,6 +387,13 @@ async function guardarImagen(dataUrl) {
   if (!m) return null;
   const buf = Buffer.from(m[2], 'base64');
   if (buf.length > 5 * 1024 * 1024) return null;
+  // Se revisa que el archivo sea de verdad una imagen (por sus primeros bytes), no solo que lo diga.
+  const esImagen = {
+    jpeg: buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff,
+    png: buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])),
+    webp: buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP',
+  }[m[1]];
+  if (!esImagen) return null;
   const r = await db.run('INSERT INTO imagenes (mime, datos) VALUES (?, ?)', [`image/${m[1]}`, buf]);
   return `/media/${r.insertId}`;
 }

@@ -2,10 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://properhouse.com.ar/</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <image:image><image:loc>https://properhouse.com.ar/img/hero.jpg</image:loc></image:image>
     <image:image><image:loc>https://properhouse.com.ar/img/retrato-frente.jpg</image:loc></image:image>
     <image:image><image:loc>https://properhouse.com.ar/img/retrato-nuca.jpg</image:loc></image:image>
     <image:image><image:loc>https://properhouse.com.ar/img/retrato-perfil.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://properhouse.com.ar/privacidad</loc>
+    <lastmod>2026-11-10</lastmod>
   </url>
 </urlset>

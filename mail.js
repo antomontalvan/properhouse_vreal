@@ -121,7 +121,7 @@ function html(t, d) {
         </tr>
         <tr>
           <td style="padding:20px 28px 8px;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f0e8;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f3f2;">
               <tr><td style="padding:18px 20px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:#0b0b0b;">
                 <strong>¿No podés venir?</strong> Avisanos con anticipación por WhatsApp a la sede:
                 <a href="${d.wa}" style="color:#0b0b0b;">${esc(telLindo(d.sede))}</a>.
